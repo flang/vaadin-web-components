@@ -293,8 +293,8 @@ import { StylingMixin } from './vaadin-grid-styling-mixin.js';
  */
 class Grid extends ElementMixin(
   ThemableMixin(
-    DataProviderMixin(
-      ArrayDataProviderMixin(
+    ArrayDataProviderMixin(
+      DataProviderMixin(
         DynamicColumnsMixin(
           ActiveItemMixin(
             ScrollMixin(
@@ -707,7 +707,7 @@ class Grid extends ElementMixin(
     if (!this._columnTree) {
       return; // No columns
     }
-    if (isElementHidden(this) || this._cache.isLoading()) {
+    if (isElementHidden(this) || this._dataProviderController.isLoading) {
       this.__pendingRecalculateColumnWidths = true;
       return;
     }
@@ -720,7 +720,7 @@ class Grid extends ElementMixin(
     if (
       this.__pendingRecalculateColumnWidths &&
       !isElementHidden(this) &&
-      !this._cache.isLoading() &&
+      !this._dataProviderController.isLoading &&
       this.__hasRowsWithClientHeight()
     ) {
       this.__pendingRecalculateColumnWidths = false;

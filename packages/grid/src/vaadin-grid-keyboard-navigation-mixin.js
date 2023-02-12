@@ -475,7 +475,7 @@ export const KeyboardNavigationMixin = (superClass) =>
         // Row details navigation logic
         if (activeRowGroup === this.$.items) {
           const item = activeRow._item;
-          const dstItem = this._cache.getItemForIndex(dstRowIndex);
+          const { item: dstItem } = this._dataProviderController.getFlatIndexInfo(dstRowIndex);
           // Should we navigate to row details?
           if (isRowDetails) {
             dstIsRowDetails = dy === 0;

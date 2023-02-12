@@ -22,7 +22,7 @@ describe('selection', () => {
 
   function configureGrid() {
     grid.dataProvider = infiniteDataProvider;
-    cachedItems = grid._cache.items;
+    cachedItems = grid._dataProviderController.rootCache.items;
     grid.selectedItems = [cachedItems[0]];
     flushGrid(grid);
     rows = getRows(grid.$.items);
@@ -178,7 +178,7 @@ describe('multi selection column', () => {
           <vaadin-grid-selection-column></vaadin-grid-selection-column>
         </vaadin-grid-column-group>
 
-        <vaadin-grid-filter-column path="value"></vaadin-grid-filter-column>          
+        <vaadin-grid-filter-column path="value"></vaadin-grid-filter-column>
       </vaadin-grid>
     `);
 
@@ -191,7 +191,7 @@ describe('multi selection column', () => {
     flushGrid(grid);
 
     selectionColumn = grid._columnTree[0][0];
-    cachedItems = grid._cache.items;
+    cachedItems = grid._dataProviderController.rootCache.items;
     rows = getRows(grid.$.items);
     headerRows = getRows(grid.$.header);
 

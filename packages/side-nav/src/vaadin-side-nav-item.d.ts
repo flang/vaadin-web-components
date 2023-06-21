@@ -9,7 +9,7 @@ import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
 export interface SideNavItemI18n {
-  drawer: string;
+  toggle: string;
 }
 
 /**

@@ -8,6 +8,10 @@ import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
 
+export interface SideNavItemI18n {
+  drawer: string;
+}
+
 /**
  * Fired when the `expanded` property changes.
  */
@@ -100,6 +104,20 @@ declare class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitEle
    * to the page that contains this item using the browser.
    */
   readonly active: boolean;
+
+  /**
+   * The object used to localize this component.
+   * To change the default localization, replace the entire
+   * `i18n` object with a custom one.
+   *
+   * The object has the following structure and default values:
+   * ```
+   * {
+   *   toggle: 'Toggle child items'
+   * }
+   * ```
+   */
+  i18n: SideNavItemI18n;
 
   addEventListener<K extends keyof SideNavItemEventMap>(
     type: K,

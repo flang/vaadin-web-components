@@ -5,6 +5,7 @@
  */
 import { html, LitElement } from 'lit';
 import { ifDefined } from 'lit/directives/if-defined.js';
+import { screenReaderOnly } from '@vaadin/a11y-base/src/styles/sr-only-styles.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { matchPaths } from '@vaadin/component-base/src/url-utils.js';
@@ -122,11 +123,35 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
         readOnly: true,
         reflectToAttribute: true,
       },
+
+      /**
+       * The object used to localize this component.
+       * To change the default localization, replace the entire
+       * `i18n` object with a custom one.
+       *
+       * The object has the following structure and default values:
+       * ```
+       * {
+       *   toggle: 'Toggle child items'
+       * }
+       * ```
+       *
+       * @type {SideNavItemI18n}
+       * @default {English/US}
+       */
+      i18n: {
+        type: Object,
+        value: () => {
+          return {
+            toggle: 'Toggle child items',
+          };
+        },
+      },
     };
   }
 
   static get styles() {
-    return sideNavItemBaseStyles;
+    return [screenReaderOnly, sideNavItemBaseStyles];
   }
 
   constructor() {
@@ -187,7 +212,7 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
   render() {
     return html`
       <div part="content" @click="${this._onContentClick}">
-        <a href="${ifDefined(this.path)}" part="link" aria-current="${this.active ? 'page' : 'false'}">
+        <a id="link" href="${ifDefined(this.path)}" part="link" aria-current="${this.active ? 'page' : 'false'}">
           <slot name="prefix"></slot>
           <slot></slot>
           <slot name="suffix"></slot>
@@ -197,12 +222,13 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
           @click="${this._onButtonClick}"
           aria-controls="children"
           aria-expanded="${this.expanded}"
-          aria-label="Toggle child items"
+          aria-labelledby="link i18n"
         ></button>
       </div>
       <ul part="children" ?hidden="${!this.expanded}">
         <slot name="children"></slot>
       </ul>
+      <div class="sr-only" id="i18n">${this.i18n.toggle}</div>
     `;
   }
 

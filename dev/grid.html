@@ -34,6 +34,15 @@
       tooltip.generator = ({ column, item }) => {
         return column && column.path && item ? `Tooltip ${column.path} ${item.name}` : '';
       };
+
+      const checkbox = document.getElementById('selectRowsByDraggingCheckbox');
+      checkbox.addEventListener("checked-changed", event => {
+        if(event.target.checked){
+          grid.setAttribute("select-rows-by-dragging", true);
+        } else{
+          grid.removeAttribute("select-rows-by-dragging");
+        }
+      });
     </script>
 
     <vaadin-grid item-id-path="name">
@@ -45,5 +54,6 @@
 
       <vaadin-tooltip slot="tooltip" hover-delay="500" hide-delay="500"></vaadin-tooltip>
     </vaadin-grid>
+    <vaadin-checkbox id="selectRowsByDraggingCheckbox" label="Select rows by dragging"></vaadin-checkbox>
   </body>
 </html>

@@ -4,8 +4,8 @@
  * This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
  */
 import '@vaadin/checkbox/src/vaadin-checkbox.js';
-import { GridColumn } from './vaadin-grid-column.js';
 import { addListener } from '@vaadin/component-base/src/gestures.js';
+import { GridColumn } from './vaadin-grid-column.js';
 
 /**
  * `<vaadin-grid-selection-column>` is a helper element for the `<vaadin-grid>`
@@ -156,8 +156,10 @@ class GridSelectionColumn extends GridColumn {
     if (this.__lassoDragStartIndex !== undefined) {
       // Get the row being hovered over
       const renderedRows = this._grid._getRenderedRows();
+      let rowHeight = 30;
       const hoveredRow = renderedRows.find((row) => {
         const rowRect = row.getBoundingClientRect();
+        rowHeight = rowRect.height;
         return this.__lassoCurrentY >= rowRect.top && this.__lassoCurrentY <= rowRect.bottom;
       });
 
@@ -187,37 +189,40 @@ class GridSelectionColumn extends GridColumn {
             } else {
               this._grid.deselectItem(row._item);
             }
-            
           }
         });
       }
 
       // Auto scroll the grid
-      this._grid.$.table.scrollTop += (this.__lassoDy || 0) / 20;
+      this._grid.$.table.scrollTop += (this.__lassoDy || 0) / (rowHeight / 2);
 
       // Schedule the next auto scroll
-      setTimeout(() => this.__lassoAutoScroller(), 20);
+      setTimeout(() => this.__lassoAutoScroller(), 100);
     }
   }
 
   /** @private */
-  __onSelectionColumnCellTrack(e) {
-    this.__lassoDy = e.detail.dy;
-    this.__lassoCurrentY = e.detail.y;
-
-    if (e.detail.state === 'start') {
+  __onSelectionColumnCellTrack(event) {
+    if (!this._grid.selectRowsByDragging) {
+      return;
+    }
+    this.__lassoDy = event.detail.dy;
+    this.__lassoCurrentY = event.detail.y;
+    if (event.detail.state === 'start') {
+      this._grid.setAttribute('disable-text-selection', true);
+      this.__lassoWasEnabled = true;
       const renderedRows = this._grid._getRenderedRows();
       // Get the row where the drag started
-      const lassoStartRow = renderedRows.find((row) => row.contains(e.currentTarget.assignedSlot));
+      const lassoStartRow = renderedRows.find((row) => row.contains(event.currentTarget.assignedSlot));
       // Whether to select or deselect the items on drag
       this.__lassoSelect = !this._grid._isSelected(lassoStartRow._item);
       // Store the index of the row where the drag started
       this.__lassoDragStartIndex = lassoStartRow.index;
       // Start the auto scroller
       this.__lassoAutoScroller();
-    } else if (e.detail.state === 'end') {
-      // Clear the drag start index
+    } else if (event.detail.state === 'end') {
       this.__lassoDragStartIndex = undefined;
+      this._grid.removeAttribute('disable-text-selection');
     }
   }
 
@@ -320,12 +325,13 @@ class GridSelectionColumn extends GridColumn {
   /** @private */
   __onActiveItemChanged(e) {
     const activeItem = e.detail.value;
-    if (this.autoSelect) {
+    if (this.autoSelect && !this.__lassoWasEnabled) {
       const item = activeItem || this.__previousActiveItem;
       if (item) {
         this._grid._toggleItem(item);
       }
     }
+    this.__lassoWasEnabled = false;
     this.__previousActiveItem = activeItem;
   }
 

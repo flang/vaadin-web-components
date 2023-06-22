@@ -406,6 +406,17 @@ class Grid extends ElementMixin(
         reflectToAttribute: true,
       },
 
+      /**
+       * When true, rows can be selected by dragging mouse cursor over selection column.
+       * @attr {boolean} select-rows-by-dragging
+       * @type {boolean}
+       */
+      selectRowsByDragging: {
+        type: Boolean,
+        value: false,
+        reflectToAttribute: true,
+      },
+
       /** @private */
       __pendingRecalculateColumnWidths: {
         type: Boolean,

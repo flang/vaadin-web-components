@@ -147,6 +147,15 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
           };
         },
       },
+
+      /**
+       * Count of child items.
+       * @private
+       */
+      _itemsCount: {
+        type: Number,
+        value: 0,
+      },
     };
   }
 
@@ -184,6 +193,17 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
    * @protected
    * @override
    */
+  willUpdate(props) {
+    super.willUpdate(props);
+
+    const children = this._childrenController.nodes;
+    this._itemsCount = children.length;
+  }
+
+  /**
+   * @protected
+   * @override
+   */
   updated(props) {
     super.updated(props);
 
@@ -191,7 +211,16 @@ class SideNavItem extends ElementMixin(ThemableMixin(PolylitMixin(LitElement))) 
       this.__updateActive();
     }
 
-    this.toggleAttribute('has-children', this._childrenController.nodes.length > 0);
+    if (props.has('_itemsCount')) {
+      this.toggleAttribute('has-children', this._itemsCount > 0);
+    }
+
+    // Propagate i18n object to all the child items
+    if (props.has('_itemsCount') || props.has('i18n')) {
+      this._childrenController.nodes.forEach((item) => {
+        item.i18n = this.i18n;
+      });
+    }
   }
 
   /** @protected */

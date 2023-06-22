@@ -8,6 +8,7 @@ import { FocusMixin } from '@vaadin/a11y-base/src/focus-mixin.js';
 import { ElementMixin } from '@vaadin/component-base/src/element-mixin.js';
 import { PolylitMixin } from '@vaadin/component-base/src/polylit-mixin.js';
 import { ThemableMixin } from '@vaadin/vaadin-themable-mixin/vaadin-themable-mixin.js';
+import type { SideNavItemI18n } from './vaadin-side-nav-item.js';
 
 /**
  * Fired when the `collapsed` property changes.
@@ -19,6 +20,8 @@ export interface SideNavCustomEventMap {
 }
 
 export type SideNavEventMap = HTMLElementEventMap & SideNavCustomEventMap;
+
+export { SideNavItemI18n };
 
 /**
  * `<vaadin-side-nav>` is a Web Component for navigation menus.
@@ -81,6 +84,21 @@ declare class SideNav extends FocusMixin(ElementMixin(ThemableMixin(PolylitMixin
    * Whether the side nav is collapsed. When collapsed, the items are hidden.
    */
   collapsed: boolean;
+
+  /**
+   * The object used to localize child items.
+   *
+   * To change the default localization, replace the entire
+   * `i18n` object with a custom one.
+   *
+   * The object has the following structure and default values:
+   * ```
+   * {
+   *   toggle: 'Toggle child items'
+   * }
+   * ```
+   */
+  i18n: SideNavItemI18n;
 
   addEventListener<K extends keyof SideNavEventMap>(
     type: K,

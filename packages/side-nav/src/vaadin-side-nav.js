@@ -105,6 +105,31 @@ class SideNav extends FocusMixin(ElementMixin(ThemableMixin(PolylitMixin(LitElem
         notify: true,
         reflectToAttribute: true,
       },
+
+      /**
+       * The object used to localize child items.
+       *
+       * To change the default localization, replace the entire
+       * `i18n` object with a custom one.
+       *
+       * The object has the following structure and default values:
+       * ```
+       * {
+       *   toggle: 'Toggle child items'
+       * }
+       * ```
+       *
+       * @type {SideNavItemI18n}
+       * @default {English/US}
+       */
+      i18n: {
+        type: Object,
+        value: () => {
+          return {
+            toggle: 'Toggle child items',
+          };
+        },
+      },
     };
   }
 
